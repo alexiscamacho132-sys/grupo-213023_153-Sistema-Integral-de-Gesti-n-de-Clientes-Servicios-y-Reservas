@@ -1,3 +1,6 @@
+#Sistema Integral de Gestión de Clientes, Servicios y Reservas
+
+#Aporte estudiante Jairo Alexis Camacho
 #Excepciones Personalizadas y Logging (La Base)
 #Este módulo debe definirse primero para que los otros estudiantes puedan usar las excepciones y el registro de errores
 import logging
@@ -19,30 +22,22 @@ class ReservaInvalidaError(SoftwareFJError): """Error en la lógica de reserva""
 
 
 
-#Clase Reserva y Orquestación de Errores _ Jairo Alexis Cmacho
-#Integra todo y maneja el flujo de ejecución
-class Reserva:
-    def __init__(self, cliente, servicio, parametros):
-        self.cliente = cliente
-        self.servicio = servicio
-        self.parametros = parametros
-        self.estado = "Pendiente"
 
-    def procesar(self):
-        try:
-            print(f"--- Procesando Reserva para {self.cliente.nombre} ---")
-            costo = self.servicio.calcular_costo(**self.parametros)
-        except TypeError as e:
-            error_msg = f"Parámetros faltantes en servicio {self.servicio.nombre}: {e}"
-            logging.error(error_msg)
-            raise ReservaInvalidaError(error_msg) from e
-        except Exception as e:
-            logging.error(f"Error inesperado: {e}")
-            raise
-        else:
-            self.estado = "Confirmada"
-            print(f"Reserva Exitosa. Costo Total: ${costo}")
-            logging.info(f"Reserva Exitosa para {self.cliente.nombre}")
-        finally:
-            print(f"Estado final de la operación: {self.estado}\n")
+#Aporte de la Estudiante: ANA KARINA GARCIA RODRIGUEZ 
+# Clase Cliente (Validación y Encapsulación)
+#Se enfoca en proteger los datos y asegurar que ningún cliente se cree con información corrupta.
+
+
+
+
+#Aporte de la estudiante ANGELA GABRIELA BECERRA ORTIZ 
+#Servicios (Herencia y Polimorfismo)
+#Define la estructura de los servicios y cómo varía el cálculo del costo
+
+
+
+
+# Aporte estudiante ..... JESUS HERNANDO VILLAMIZAR ESPINOSA 
+#Clase Reserva y Orquestación de Errores 
+#Integra todo y maneja el flujo de ejecución
 
