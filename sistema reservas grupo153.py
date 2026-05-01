@@ -27,6 +27,72 @@ class ReservaInvalidaError(SoftwareFJError): """Error en la lógica de reserva""
 # Clase Cliente (Validación y Encapsulación)
 #Se enfoca en proteger los datos y asegurar que ningún cliente se cree con información corrupta.
 
+import re
+
+class Cliente:
+    def __init__(self, nombre, documento, correo, telefono):
+        try:
+            # Encapsulación de atributos
+            self.__nombre = None
+            self.__documento = None
+            self.__correo = None
+            self.__telefono = None
+
+            # Validaciones mediante setters
+            self.set_nombre(nombre)
+            self.set_documento(documento)
+            self.set_correo(correo)
+            self.set_telefono(telefono)
+
+        except Exception as e:
+            logging.error(f"Error al crear cliente: {e}")
+            raise ClienteInvalidoError(f"Datos inválidos del cliente: {e}")
+
+    # ---------------- VALIDACIONES ---------------- #
+
+    def set_nombre(self, nombre):
+        if not nombre or not nombre.strip():
+            raise ValueError("El nombre no puede estar vacío")
+        self.__nombre = nombre
+
+    def set_documento(self, documento):
+        if not str(documento).isdigit():
+            raise ValueError("El documento debe ser numérico")
+        self.__documento = documento
+
+    def set_correo(self, correo):
+        patron = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(patron, correo):
+            raise ValueError("Correo electrónico inválido")
+        self.__correo = correo
+
+    def set_telefono(self, telefono):
+        if not str(telefono).isdigit() or len(str(telefono)) < 7:
+            raise ValueError("Teléfono inválido")
+        self.__telefono = telefono
+
+    # ---------------- GETTERS (PROPIEDADES) ---------------- #
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @property
+    def documento(self):
+        return self.__documento
+
+    @property
+    def correo(self):
+        return self.__correo
+
+    @property
+    def telefono(self):
+        return self.__telefono
+
+    # ---------------- MÉTODOS ---------------- #
+
+    def mostrar_info(self):
+        return f"Cliente: {self.__nombre} - Documento: {self.__documento}"
 
 
 
