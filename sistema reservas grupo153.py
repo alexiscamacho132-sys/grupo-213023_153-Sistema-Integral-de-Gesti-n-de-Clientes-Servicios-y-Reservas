@@ -101,6 +101,77 @@ class Cliente:
 #Define la estructura de los servicios y cómo varía el cálculo del costo
 
 
+class Servicio(ABC):
+    def __init__(self, nombre, costo_base):
+        self.nombre = nombre
+        self.costo_base = costo_base
+
+    @abstractmethod
+    def calcular_costo(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def descripcion(self):
+        pass
+
+    def validar(self):
+        if self.costo_base < 0:
+            raise ServicioNoDisponibleError("El costo no puede ser negativo")
+        if not self.nombre:
+            raise ServicioNoDisponibleError("El servicio debe tener nombre")
+
+
+class ServicioSala(Servicio):
+    def calcular_costo(self, **kwargs):
+        try:
+            self.validar()
+            horas = kwargs.get("horas")
+            if horas is None or horas <= 0:
+                raise ServicioNoDisponibleError("Horas inválidas")
+        except Exception as e:
+            logging.error(f"Error en ServicioSala: {e}")
+            raise
+        else:
+            return self.costo_base * horas
+
+    def descripcion(self):
+        return f"Reserva de sala: {self.nombre}"
+
+
+class ServicioEquipo(Servicio):
+    def calcular_costo(self, **kwargs):
+        try:
+            self.validar()
+            dias = kwargs.get("dias")
+            if dias is None or dias <= 0:
+                raise ServicioNoDisponibleError("Días inválidos")
+        except Exception as e:
+            logging.error(f"Error en ServicioEquipo: {e}")
+            raise
+        else:
+            return self.costo_base * dias * 1.1
+
+    def descripcion(self):
+        return f"Alquiler de equipo: {self.nombre}"
+
+
+class ServicioAsesoria(Servicio):
+    def calcular_costo(self, **kwargs):
+        try:
+            self.validar()
+            horas = kwargs.get("horas")
+            if horas is None or horas <= 0:
+                raise ServicioNoDisponibleError("Horas inválidas")
+        except Exception as e:
+            logging.error(f"Error en ServicioAsesoria: {e}")
+            raise
+        else:
+            return self.costo_base * horas + 50
+
+    def descripcion(self):
+        return f"Asesoría especializada: {self.nombre}"
+
+
 
 
 # Aporte estudiante ..... JESUS HERNANDO VILLAMIZAR ESPINOSA 
