@@ -178,3 +178,31 @@ class ServicioAsesoria(Servicio):
 #Clase Reserva y Orquestación de Errores 
 #Integra todo y maneja el flujo de ejecución
 
+@abstractmethod
+class Reserva:
+    def __init__ (self, cliente, servicio, **kwargs):
+        self.cliente = cliente
+        self.servicio = servicio
+        self.parametros = kwargs
+    
+    def procesar (self):
+        try:
+            costo = self.servicio.calcular_costo(**self.parametros)
+        except Exception as e:
+            logging.error(f"error al procesar la reserva: {e}")
+            raise ReservaInvalidaError(f"No se pudo procesar la reserva")
+        else:
+            self.estado = "confirmada"
+            return costo
+    
+    def confirmar (self):
+        if self.estado != "confirmada":
+            raise ReservaInvalidaError("No se puede confirmar ")
+        return "Reserva confirmada"
+    
+    def cancelar (self):
+        self.estado == ""
+        return "Reserva cancelada con éxito"
+
+    def mostrar(self):
+        return f"{self.cliente.mostrar_info()} | {self.servicio.descripcion()} | Estado: {self.estado}"
